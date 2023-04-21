@@ -1,3 +1,5 @@
+![Desktop Quest](./DesktopQuest/src/images/example.png)
+
 How to Run 
 1. executable jar is provided within the zip file, double click to run
 2. The build environment for this project is Java 8, should be able to 
