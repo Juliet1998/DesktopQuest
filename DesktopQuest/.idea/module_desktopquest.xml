@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_desktopquest" default="compile.module.desktopquest">
+  <dirname property="module.desktopquest.basedir" file="${ant.file.module_desktopquest}"/>
+  
+  <property name="module.jdk.home.desktopquest" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.desktopquest" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.desktopquest" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.desktopquest" value="-encoding UTF-8 -source 10 -target 10 ${compiler.args}"/>
+  
+  <property name="desktopquest.output.dir" value="${module.desktopquest.basedir}/../out/production/DesktopQuest"/>
+  <property name="desktopquest.testoutput.dir" value="${module.desktopquest.basedir}/../out/test/DesktopQuest"/>
+  
+  <path id="desktopquest.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="desktopquest.module.production.classpath">
+    <path refid="${module.jdk.classpath.desktopquest}"/>
+  </path>
+  
+  <path id="desktopquest.runtime.production.module.classpath">
+    <pathelement location="${desktopquest.output.dir}"/>
+  </path>
+  
+  <path id="desktopquest.module.classpath">
+    <path refid="${module.jdk.classpath.desktopquest}"/>
+    <pathelement location="${desktopquest.output.dir}"/>
+  </path>
+  
+  <path id="desktopquest.runtime.module.classpath">
+    <pathelement location="${desktopquest.testoutput.dir}"/>
+    <pathelement location="${desktopquest.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.desktopquest">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.desktopquest">
+    <patternset refid="excluded.from.module.desktopquest"/>
+  </patternset>
+  
+  <path id="desktopquest.module.sourcepath">
+    <dirset dir="${module.desktopquest.basedir}/../../DesktopQuest">
+      <include name="src"/>
+      <include name="src/images"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.desktopquest" depends="compile.module.desktopquest.production,compile.module.desktopquest.tests" description="Compile module DesktopQuest"/>
+  
+  <target name="compile.module.desktopquest.production" description="Compile module DesktopQuest; production classes">
+    <mkdir dir="${desktopquest.output.dir}"/>
+    <javac destdir="${desktopquest.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.desktopquest}/javac">
+      <compilerarg line="${compiler.args.desktopquest}"/>
+      <bootclasspath refid="desktopquest.module.bootclasspath"/>
+      <classpath refid="desktopquest.module.production.classpath"/>
+      <src refid="desktopquest.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.desktopquest"/>
+    </javac>
+    
+    <copy todir="${desktopquest.output.dir}">
+      <fileset dir="${module.desktopquest.basedir}/../src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.desktopquest.basedir}/../src/images">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.desktopquest.tests" depends="compile.module.desktopquest.production" description="compile module DesktopQuest; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.desktopquest" description="cleanup module">
+    <delete dir="${desktopquest.output.dir}"/>
+    <delete dir="${desktopquest.testoutput.dir}"/>
+  </target>
+</project>
